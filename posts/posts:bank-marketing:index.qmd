@@ -1,0 +1,1055 @@
+---
+title: "银行电话营销转化预测"
+author: "曹颖"
+date: "2026-01-30"
+categories: [Machine Learning, R, Visualization]
+image: image.jpg  
+---
+
+## 1. 项目背景
+在这个项目中，我分析了葡萄牙银行机构的电话营销数据...
+
+## 2. 数据探索 (EDA)
+我使用 R 语言的 ggplot2 绘制了云雨图来观察通话时长分布：
+
+# 导入必要的包
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(scales)
+```
+
+# 导入数据
+
+```{r}
+df <- read_delim("/Users/inori/Desktop/数据分析/银行电话营销策略分析/bank+marketing/bank-additional/bank-additional-full.csv", delim = ";", show_col_types = FALSE)
+head(df)
+```
+
+# 绘制变量分布图
+## 绘制离散型变量分布图（堆叠条形图）
+
+```{r}
+plot_data <- df %>% 
+  select(where(is.character)) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "category") %>%
+  group_by(variable, category) %>%
+  summarise(count = n(), .groups = "drop_last") %>%
+  mutate(
+    prop = count / sum(count),
+    label_text = ifelse(prop > 0.15, category, "") # 只显示占比大于15%的标签
+  ) %>%
+  
+  arrange(variable, desc(prop)) %>% # 按占比降序排列
+  mutate(rank = as.factor(row_number())) %>% 
+  ungroup()
+
+# 绘图
+my_blue_palette <- colorRampPalette(RColorBrewer::brewer.pal(9, "Blues")) # 设置调色盘
+
+ggplot(plot_data, aes(x = prop, y = variable, fill = rank)) +
+  geom_col(width = 0.7, color = "white", alpha = 0.95) +
+  
+  geom_text(aes(label = label_text), 
+            position = position_stack(vjust = 0.5), 
+            size = 5, color = "white", fontface = "bold") +
+  
+  scale_fill_manual(values = rev(my_blue_palette(length(unique(plot_data$rank))))) +
+  
+  scale_x_continuous(labels = percent, expand = c(0,0)) +
+  labs(title = NULL, 
+       x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    panel.grid = element_blank(),
+    axis.text.y = element_text(size = 11, face = "bold", color = "#2C3E50"),
+    axis.text.x = element_text(color = "grey60")
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/discrete.png", width = 12, height = 8, dpi = 300)
+```
+
+## 绘制连续型变量分布图
+
+```{r}
+plot_data_cont_stacked <- df %>%
+  select(where(is.numeric), y) %>%   
+  pivot_longer(cols = -y,            
+               names_to = "variable", 
+               values_to = "value")
+
+ggplot(plot_data_cont_stacked, aes(x = value, fill = y)) +
+  geom_histogram(bins = 30,            
+                 alpha = 1,          
+                 position = "stack") + 
+  scale_fill_manual(values = c("no" = "#C6DBEF", "yes" = "#143A72"), 
+                    name = "y") +
+  facet_wrap(~ variable, scales = "free", ncol = 5) +
+  labs(title = NULL, 
+       subtitle = NULL,
+       x = NULL, 
+       y = NULL) +
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(face = "bold", size = 14, color = "#2C3E50"),
+    legend.position = "bottom",                      
+    strip.background = element_rect(fill = "#EBF5FB", color = NA), 
+    strip.text = element_text(color = "#143A72", face = "bold"),   
+    panel.grid = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5) 
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/continuous.png", width = 12, height = 5, dpi = 300)
+```
+
+# 初步数据清洗
+
+```{r}
+# 1. 检查缺失值/数据去重
+  missing_values <- colSums(is.na(df)) # 检查每一列的缺失值数量
+  print(missing_values)
+  
+  duplicate_rows <- sum(duplicated(df)) # 检查是否存在重复行
+  print(paste("重复行数量:", duplicate_rows))
+  
+  df_clean <- df %>% distinct() # 如果有重复行，删除
+
+# 2. 数据转义
+df_trans <- df_clean %>%
+  mutate(
+    across(where(is.character), \(x) na_if(x, "unknown")), # 将所有字符型变量中的 "unknown" 替换为 NA
+    pdays = na_if(pdays, 999) # "pdays" 中的 "999" 替换为 NA
+  )
+
+# 检查结果
+df_trans %>%
+  select(job, default, housing, loan, pdays, marital, education) %>%
+  head(10)
+```
+
+# 探索性数据分析
+
+```{r}
+# 加载必要的包
+library(patchwork)
+library(tidyverse)
+library(scales)
+library(ggridges)
+library(gghalves)
+```
+
+## 个人信息类
+
+```{r}
+target_variables <- c("job", "education", "marital", "default", "housing", "loan")
+
+for (var in target_variables) {
+  
+  # 预处理数据并计算占比，用于排序
+  rank_data <- df_trans %>%
+    filter(!is.na(!!sym(var))) %>%
+    count(!!sym(var)) %>%
+    arrange(n) # 从小到大排序
+  
+  # 准备绘图数据
+  plot_data <- df_trans %>%
+    select(y, !!sym(var)) %>%
+    mutate(!!sym(var) := fct_na_value_to_level(factor(!!sym(var)), level = "NA")) %>%
+    mutate(!!sym(var) := fct_reorder(!!sym(var), .x = (!!sym(var) == "NA"), .desc = FALSE)) 
+    
+  non_na_levels <- rank_data[[var]]
+  plot_data <- plot_data %>%
+    mutate(!!sym(var) := fct_relevel(!!sym(var), "NA", after = 0)) %>%
+    mutate(!!sym(var) := fct_relevel(!!sym(var), as.character(non_na_levels), after = 1))
+
+  # 构造颜色向量
+  levels_present <- levels(plot_data[[var]])
+  num_non_na <- sum(levels_present != "NA")
+  custom_colors <- c("#D3D3D3", my_blue_palette(num_non_na)) 
+  names(custom_colors) <- levels_present
+
+  # 绘图
+  p <- ggplot(plot_data, aes(x = y, fill = !!sym(var))) +
+    geom_bar(position = "fill", color = "black", linewidth = 0.2) + 
+    geom_text(
+      aes(label = !!sym(var)),
+      stat = "count", 
+      position = position_fill(vjust = 0.5),
+      size = 3,
+      color = "black",
+      fontface = "bold",
+      check_overlap = TRUE
+    ) +
+    scale_fill_manual(values = custom_colors) +
+    scale_y_continuous(labels = scales::percent) +
+    theme_minimal() +
+    labs(title = NULL,
+         x = "y",
+         y = paste("% of", var),
+         fill = var)
+  print(p)
+  
+  file_name <- paste0("/Users/inori/Desktop/数据分析/银行电话营销策略分析/plot_", var, ".png")
+  ggsave(filename = file_name, plot = p, width = 8, height = 6, dpi = 300)
+}
+```
+
+### Default 变量的缺失视作一类，并重新分为没有违约记录和其他
+
+```{r}
+png("/Users/inori/Desktop/数据分析/银行电话营销策略分析/Default_Mosaic_Comparison.png", width = 2000, height = 1000, res = 200)
+
+par(mfrow = c(1, 2))
+
+counts_before <- table(df_trans$default, df_trans$y, useNA = "ifany")
+rownames(counts_before)[is.na(rownames(counts_before))] <- "NA"
+
+# plot1
+mosaicplot(counts_before,
+           main = "Before Reclassify",
+           xlab = "default", 
+           ylab = "y",
+           color = c("#C6DBEF", "#1D3567"), 
+           border = "black",
+           las = 1)
+
+# 合并default变量
+df_trans <- df_trans %>%
+  mutate(
+    default = default %>%
+      fct_na_value_to_level(level = "other") %>%
+      fct_collapse(other = "yes")
+  )
+
+counts_trans <- table(df_trans$default, df_trans$y, useNA = "ifany")
+
+# plot2
+mosaicplot(counts_trans,
+           main = "After Reclassify",
+           xlab = "default", 
+           ylab = "y",
+           color = c("#C6DBEF", "#1D3567"), 
+           border = "black",
+           las = 1)
+dev.off()
+
+par(mfrow = c(1, 1))
+```
+
+### education变量类型转换
+
+```{r}
+# 1. 绘制education和job变量热力图
+heatmap_absolute <- df_trans %>%
+  select(job, education) %>%
+  mutate(across(c(job, education), ~fct_na_value_to_level(factor(.), level = "NA"))) %>%
+  count(job, education) %>%
+  ungroup() %>%
+  mutate(prop = n / sum(n))
+
+ggplot(heatmap_absolute, aes(x = education, y = job, fill = prop)) +
+  geom_tile(color = "white", lwd = 0.5) +
+  
+  geom_text(aes(label = scales::percent(prop, accuracy = 0.1)),
+            color = ifelse(heatmap_absolute$prop > max(heatmap_absolute$prop) / 2, "white", "black"),
+            size = 3) +
+  
+  scale_fill_distiller(palette = "Blues",
+                       direction = 1,
+                       labels = scales::percent,
+                       name = "Percentage") +
+  theme_minimal() +
+  labs(title = "",
+       x = "education",
+       y = "job") +
+  theme(
+    panel.grid = element_blank(), # 去掉所有网格线
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/heatmap.png", width = 12, height = 10, dpi = 300)
+
+# 2. education变量转换
+df_edu_trans <- df_trans %>%
+  mutate(education = case_match(education,
+     "illiterate" ~ 1,
+     "basic.4y" ~ 4,
+     "basic.6y" ~ 6,
+     "basic.9y" ~ 9,
+     "high.school" ~ 12,
+     "professional.course" ~ 14,
+     "university.degree" ~ 16,
+     .default = NA 
+  ))
+
+# 3. 绘制山峦图
+df_plot_ridges <- df_edu_trans %>%
+  filter(!is.na(job), !is.na(education)) %>%
+  mutate(job = fct_reorder(job, education, .fun = median))
+
+ggplot(df_plot_ridges, aes(x = education, y = job, fill = after_stat(x))) + 
+  geom_density_ridges_gradient(scale = 1.5, rel_min_height = 0.01) +
+  
+  scale_fill_distiller(palette = "Blues",
+                       direction = 1,
+                       name = "Years") +
+  scale_x_continuous(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)) + 
+  theme_ridges(font_size = 12, grid = FALSE) +
+  labs(title = "",
+       x = "Years of Education",
+       y = "Job") +
+  theme(
+    axis.title.x = element_text(hjust = 0.5, size = 14),
+    axis.title.y = element_text(hjust = 0.5, size = 14),
+    legend.position = "none"
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/peak_plot.png", width = 12, height = 8, dpi = 300)
+```
+
+### marital变量重新划分
+
+```{r}
+# 1. 生成交叉表（包含 NA）
+counts_marital <- table(df_edu_trans$marital, df_edu_trans$y, useNA = "ifany")
+
+# 2. 把 <NA> 行名改成字符串 "NA"
+rownames(counts_marital)[is.na(rownames(counts_marital))] <- "NA"
+
+# 3. 绘图
+mosaicplot(counts_marital,
+           main = "",
+           xlab = "y", 
+           ylab = "Marital Status",  
+           color = c("#C6DBEF", "#1D3567"), 
+           border = "black",  # 白色分割线，现代感强
+           lwd = 1,           # 边框粗细
+           las = 1            # 纵轴标签水平显示
+)
+
+# 4. marital变量划分为：结过婚(married & divorced, 1) vs 没结过婚(single, 0)
+df_marital_trans <- df_edu_trans %>%
+  mutate(
+    marital = fct_collapse(
+      marital,
+      "1" = c("married", "divorced"),
+      "0" = "single"
+    )
+  )
+head(df_marital_trans)
+```
+
+### 保留age变量数值类型不做分箱（云雨图）
+
+```{r}
+my_colors <- c("no" = "#C6DBEF", "yes" = "#143A72")
+nudge_gap <- 0.2
+
+plot_split_violin <- function(data, x_var, y_var, group_var, x_label) {
+  
+  ggplot(data, aes(x = .data[[x_var]], y = .data[[y_var]], fill = .data[[group_var]])) +
+    
+    geom_half_violin(
+      data = data %>% filter(.data[[group_var]] == "yes"),
+      aes(fill = .data[[group_var]]),
+      side = "r",   
+      position = position_nudge(x = nudge_gap),
+      scale = "width", alpha = 0.9, color = "black", lwd = 0.5
+    ) +
+    
+    geom_half_violin(
+      data = data %>% filter(.data[[group_var]] == "no"),
+      aes(fill = .data[[group_var]]),
+      side = "r",
+      position = position_nudge(x = nudge_gap),
+      scale = "width", alpha = 0.9, color = "black", lwd = 0.5
+    ) +
+    
+    geom_point(
+    aes(color = .data[[group_var]]), 
+    position = position_jitterdodge(jitter.width = 0.5, dodge.width = 0), 
+    size = 0.3, alpha = 0.2, shape = 21, color = "white", show.legend = FALSE
+    ) +
+    
+    geom_boxplot(
+      width = 0.15,  
+      position = position_dodge(width = 0.2),
+      outlier.shape = NA, 
+      alpha = 1, color = "black", lwd = 0.3, show.legend = TRUE
+    ) +
+    
+    stat_summary(
+      fun = mean, geom = "point", shape = 23, size = 1.5, fill = "white",
+      position = position_dodge(width = 0.15), show.legend = FALSE
+    ) +
+
+    scale_fill_manual(values = my_colors) +
+    theme_classic() +
+    labs(x = x_label, y = "age") +
+    theme(
+      legend.position = "top",
+      axis.text.x = element_text(size = 12, color = "black"),
+      panel.grid.major.y = element_line(color = "grey90", linetype = "dashed")
+    )
+}
+
+df_plot_split <- df_edu_trans %>%
+  filter(!is.na(job), !is.na(education), !is.na(y)) %>%
+  mutate(education = factor(education), y = factor(y))
+
+p1_split <- plot_split_violin(df_plot_split, "job", "age", "y", "job") + 
+  theme(axis.text.x = element_text(angle = 0))
+
+p2_split <- plot_split_violin(df_plot_split, "education", "age", "y", "education") + 
+  theme(legend.position = "none")
+
+final_split_plot <- (p1_split / p2_split) + 
+  plot_layout(guides = "collect") & 
+  theme(legend.position = "top")
+
+print(final_split_plot)
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/rain_plot.png", final_split_plot, width = 15, height = 7)
+```
+
+# 本次营销情况变量
+
+```{r}
+# 加载必要的包
+library(tidyverse)
+library(gghalves)
+library(vcd)
+library(ggpp)
+```
+
+## 基于month提取出年份和月通话量特征
+
+### 按年份与月份划分直方图
+
+```{r}
+month_levels <- c("jan", "feb", "mar", "apr", "may", "jun", 
+                  "jul", "aug", "sep", "oct", "nov", "dec")
+
+df_plot <- df_marital_trans %>%
+  mutate(
+    month = factor(month, levels = month_levels),
+    month_num = as.numeric(month),
+    y = factor(y, levels = c("no", "yes")) 
+  ) %>%
+  # 还原年份逻辑
+  mutate(group_flag = ifelse(month_num < lag(month_num, default = 0), 1, 0)) %>%
+  mutate(year_offset = cumsum(group_flag)) %>%
+  mutate(year = 2008 + year_offset) %>%
+  filter(year %in% c(2008, 2009, 2010)) %>%
+  select(-group_flag, -year_offset)
+
+df_summary <- df_plot %>%
+  group_by(year, month_num, y) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(year, month_num) %>%
+  mutate(total_count = sum(count)) %>%
+  ungroup() %>%
+  mutate(global_rate = sum(count[y=="yes"]) / sum(count))
+
+
+my_colors <- c("no" = "#C6DBEF", "yes" = "#143A72") # 定义配色
+
+p_left <- ggplot(df_summary, aes(x = month_num, y = count, fill = y)) +
+  geom_bar(stat = "identity", width = 0.8) +
+  geom_label(
+    aes(y = total_count, label = total_count), 
+    data = df_summary %>% filter(y == "no"), # Hack: 只取一行数据用来画总标签
+    vjust = -0.2, size = 3, fill = "white", label.size = 0.1, alpha = 0.8
+  ) +
+  facet_grid(year ~ ., scales = "free_y") + 
+  scale_x_continuous(breaks = 1:12, labels = 1:12) + # X轴显示 1-12
+  scale_fill_manual(values = my_colors) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) + # 顶部留白给标签
+  labs(y = "number of observations", x = NULL, title = "Observations") +
+  theme_classic() +
+  theme(
+    legend.position = "none", 
+    strip.background = element_rect(fill = "grey95"), # 分面标签背景色
+    strip.text = element_text(size = 10, face = "bold"),
+    panel.grid.major.y = element_line(color = "grey90")
+  )
+
+p_right <- ggplot(df_summary, aes(x = month_num, y = count, fill = y)) +
+  geom_bar(stat = "identity", position = "fill", width = 0.8) +
+  geom_hline(yintercept = mean(df_plot$y == "yes"), 
+             linetype = "dashed", color = "darkgray", size = 0.7) +
+  facet_grid(year ~ .) +
+  scale_x_continuous(breaks = 1:12, labels = 1:12) +
+  scale_y_continuous(labels = scales::percent, expand = c(0,0)) + 
+  scale_fill_manual(values = my_colors) +
+  labs(y = "% of success in Observations", x = "month", 
+       fill = "y", # 图例标题
+       title = "% of success in Observations") +
+  theme_classic() +
+  theme(
+    strip.background = element_rect(fill = "grey95"),
+    strip.text = element_text(size = 10, face = "bold"),
+    legend.position = "right" 
+  )
+
+final_plot <- p_left + p_right + 
+  plot_layout(widths = c(1, 1)) # 设置左右宽度比例为 1:1
+
+print(final_plot)
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/month_plot.png", final_plot, width = 15, height = 5)
+```
+
+### 每月通话数量云雨图
+
+```{r}
+df_rain_real <- df_summary %>%
+  uncount(weights = count) 
+
+my_colors <- c("no" = "#C6DBEF", "yes" = "#143A72")
+
+ggplot(df_rain_real, aes(x = y, y = total_count, fill = y)) + 
+  
+  geom_half_violin(
+    side = "r", 
+    position = position_nudge(x = 0.15), 
+    adjust = 1.2,
+    alpha = 0.9,
+    trim = FALSE,      
+    color = "black",   
+    size = 0.3         
+  ) +
+  
+  geom_jitter(
+    aes(color = y),
+    shape = 21,       
+    size = 0.2,         
+    alpha = 0.6,    
+    position = position_jitterdodge(jitter.width = 0.3, jitter.height = 100, dodge.width = 1), 
+    show.legend = FALSE
+  ) +
+
+  geom_boxplot(
+    width = 0.1,          
+    outlier.shape = NA,    
+    color = "black", 
+    alpha = 1,
+    position = position_nudge(x = 0), 
+    size = 0.3
+  ) +
+
+  coord_flip() +
+  
+  scale_fill_manual(values = my_colors) +
+  scale_color_manual(values = my_colors) +
+  
+  labs(
+    x = "Result",            
+    y = "Monthly Contacts",  
+    fill = NULL              
+  ) +
+  
+  theme_classic() + 
+  theme(
+    legend.position = c(0.9, 0.9), 
+    legend.direction = "horizontal",
+    axis.text = element_text(color = "black", size = 10)
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/month_rain_plot.png", width = 11, height = 3, dpi = 300)
+```
+
+## 删除上次通话星期变量
+
+```{r}
+df_week <- df_marital_trans %>%
+  mutate(
+    month = factor(month, levels = c("jan", "feb", "mar", "apr", "may", "jun", 
+                                     "jul", "aug", "sep", "oct", "nov", "dec")),
+    month_num = as.numeric(month),
+    day_of_week = factor(day_of_week, levels = c("mon", "tue", "wed", "thu", "fri"))
+  ) %>%
+  mutate(group_flag = ifelse(month_num < lag(month_num, default = 0), 1, 0)) %>%
+  mutate(year_offset = cumsum(group_flag)) %>%
+  mutate(year = factor(2008 + year_offset)) %>% # 转为因子用于分面
+  filter(year %in% c("2008", "2009", "2010"))   # 过滤掉异常年份
+
+table(df_week$year, df_week$month)
+
+struct_data <- structable(~ day_of_week + y + month + year, data = df_week)
+
+mosaic(struct_data,
+       shade = TRUE, 
+       main = "Mosaic Plot of Day of Week",
+       direction = c("v", "v", "h", "h"), # 切割方向：纵、纵、横、横
+       labeling = labeling_border(
+         rot_labels = c(0, 0, 0, 0),       # 标签旋转角度
+         just_labels = c("left", "left", "center", "center"),
+         tl_labels = c(FALSE, TRUE)        # 是否显示顶部/左侧标签
+       ),
+       spacing = spacing_highlighting # 调整各个分割层级的间距 (Spacing)
+)
+
+my_colors <- c("no" = "#C6DBEF", "yes" = "#143A72")
+
+p_right <- ggplot(df_week, aes(x = day_of_week, fill = y)) +
+  geom_bar(position = "fill", width = 0.8) +
+  facet_grid(month ~ year, switch = "y") +
+  scale_y_continuous(labels = scales::percent, breaks = c(0, 0.5, 1)) +
+  scale_fill_manual(values = my_colors) +
+  
+  labs(x = "day_of_week", y = "count (%)", title = "Distribution by Year & Month") +
+  
+  theme_bw() + 
+  theme(
+    panel.grid = element_blank(),
+    strip.background = element_rect(fill = "white", color = "black"),
+    strip.text = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    axis.text.y = element_text(size = 6),
+    legend.position = "right"
+  )
+
+print(p_right)
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/week_plot.png", width = 10, height = 10, dpi = 300)
+```
+
+## duration 按电话类型分组云雨图
+
+```{r}
+df_duration <- df_week %>%
+  filter(duration <= 5000) %>% 
+  filter(!is.na(contact)) %>%
+  mutate(y = factor(y, levels = c("no", "yes"))) 
+
+my_colors <- c("no" = "#C6DBEF", "yes" = "#143A72")
+
+ggplot(df_duration, aes(x = contact, y = duration, fill = y)) +
+  
+  geom_half_violin(
+    side = "r", 
+    position = position_nudge(x = 0.15), 
+    scale = "width", 
+    adjust = 1.2,     
+    trim = FALSE,     
+    alpha = 0.9, 
+    color = "black", 
+    size = 0.3
+  ) +
+  
+  geom_point(
+    aes(color = y, y = duration - 110),
+    position = position_jitterdodge(
+      jitter.width = 0.5,  # 【宽度】：让雨下得更宽，散得更开
+      jitter.height = 0,   # 【精度】：数据值不准乱动
+      dodge.width = 0    # 【间距】：跟随分组
+    ),
+    size = 0.6, 
+    alpha = 0.1, 
+    shape = 16, # 实心小圆点
+    show.legend = FALSE
+  ) +
+  
+  geom_boxplot(
+    position = position_dodgenudge(width = 0.2, x = -0.02),
+    width = 0.15,      # 箱子宽度
+    outlier.shape = NA, 
+    alpha = 1, 
+    color = "black", 
+    size = 0.3
+  ) +
+  
+  coord_flip() + # 翻转坐标轴
+  scale_fill_manual(values = my_colors, name = "Result:") +
+  scale_color_manual(values = my_colors) +
+  labs(
+    x = "contact", 
+    y = "duration"
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "top", # 图例在顶部
+    axis.text = element_text(color = "black", size = 10),
+    plot.margin = margin(10, 20, 10, 10)
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/contact_plot.png", width = 12, height = 4, dpi = 300)
+```
+
+# 上次营销情况变量
+
+```{r}
+# 加载必要的包
+library(vcd)
+```
+
+## previous与poutcome变量只保留其一
+
+```{r}
+df_previous <- df_week %>%
+  mutate(poutcome = fct_recode(poutcome,
+    "n" = "nonexistent",  
+    "f" = "failure", 
+    "s" = "success"
+  ))
+
+mosaic(~ previous + y + poutcome, 
+       data = df_previous,
+       gp = shading_binary,
+       legend = FALSE,
+       main = "")
+```
+
+# 经济及社会环境变量
+
+## 经济指标与营销成果关系图
+
+```{r}
+# 1. 加载必要的包
+library(ggplot2)
+library(gghalves) 
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(scales)
+```
+
+## 经济变量云雨图
+
+```{r}
+my_colors <- c("no" = "#C6DBEF", "yes" = "#143A72")
+
+df_eco <- df_marital_trans %>%
+  select(y, emp.var.rate, cons.price.idx, cons.conf.idx, euribor3m, nr.employed) %>%
+  pivot_longer(
+    cols = -y,                 # 除了 y 以外的所有列都进行转换
+    names_to = "indicator",    # 新列名：存储指标名称
+    values_to = "value"        # 新列名：存储具体的数值
+  )
+
+ggplot(df_eco, aes(x = y, y = value, fill = y)) +
+  
+  geom_half_violin(
+    side = "r", 
+    position = position_nudge(x = 0.2), 
+    scale = "width", 
+    adjust = 1.2,      
+    trim = FALSE,      
+    alpha = 0.9, 
+    color = "black", 
+    size = 0.3
+  ) +
+  
+  geom_point(
+    aes(color = y),
+    position = position_jitter(width = 0.15, height = 0), # 仅在水平方向抖动
+    size = 0.4, 
+    alpha = 0.2, 
+    shape = 16,
+    show.legend = FALSE
+  ) +
+  
+  geom_boxplot(
+    position = position_dodgenudge(width = 0.25, x = 0), # 与小提琴位置对齐
+    width = 0.1,       
+    outlier.shape = NA, 
+    alpha = 1, 
+    color = "black", 
+    size = 0.3
+  ) +
+  
+  facet_wrap(~indicator, scales = "free", ncol = 3) +
+  
+  coord_flip() + 
+  scale_fill_manual(values = my_colors, name = "Result:") +
+  scale_color_manual(values = my_colors) +
+  labs(
+    x = "Marketing Outcome (y)", 
+    y = "Economic Indicator Value",
+    title = "Economic Indicators vs. Marketing Outcome"
+  ) +
+  theme_classic() +
+  theme(
+    legend.position = "top",
+    axis.text = element_text(color = "black", size = 9),
+    strip.background = element_rect(fill = "grey95", color = NA), # 分面标题背景
+    strip.text = element_text(face = "bold", size = 10)           # 分面标题文字
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/eco_y.png", width = 16, height = 8, dpi = 300)
+```
+
+## 经济变量时间序列图
+
+```{r}
+ts_macro_data <- df_plot %>%
+  mutate(date = make_date(year, month_num, 1)) %>%
+  select(date, emp.var.rate, cons.price.idx, cons.conf.idx, euribor3m, nr.employed) %>%
+  distinct() %>%  # 去除重复行，只保留每个月唯一的经济指标值
+  
+  pivot_longer(
+    cols = -date, 
+    names_to = "indicator", 
+    values_to = "value"
+  )
+
+ggplot(ts_macro_data, aes(x = date, y = value, color = indicator)) +
+  facet_wrap(~indicator, scales = "free_y", ncol = 1, strip.position = "right") +
+  geom_line(size = 1) +
+  scale_color_brewer(palette = "Set1", name = "Economic Indicators") +
+  scale_x_date(date_labels = "%Y-%m", date_breaks = "1 months") +
+  
+  labs(
+    title = "Macroeconomic Indicators Over Time",
+    x = "Date",
+    y = "Indicator Value"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom", 
+    axis.text.x = element_text(angle = 45, hjust = 1), # X轴标签倾斜
+    strip.background = element_rect(fill = "#E6F0F7", color = NA),
+    strip.text = element_text(face = "bold", color = "#143A72")
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/ts_plot.png", width = 12, height = 8, dpi = 300)
+```
+## 经济变量归一化处理
+
+```{r}
+ts_macro_raw <- df_plot %>%
+  mutate(date = make_date(year, month_num, 1)) %>%
+  select(date, emp.var.rate, cons.price.idx, cons.conf.idx, euribor3m, nr.employed) %>%
+  distinct() %>% # 去重，只保留每月的唯一值
+  arrange(date)  # 按日期排序
+
+ts_macro_norm <- ts_macro_raw %>% # 归一化处理
+  mutate(across(
+    .cols = where(is.numeric),       # 对所有数值型列进行操作
+    .fns = ~ rescale(.),             # 使用 scales 包的 rescale 函数归一化到 [0,1]
+    .names = "{.col}"                # 保持列名不变
+  ))
+
+plot_data <- ts_macro_norm %>%
+  pivot_longer(
+    cols = -date, 
+    names_to = "indicator", 
+    values_to = "normalized_value"
+  )
+
+ggplot(plot_data, aes(x = date, y = normalized_value, color = indicator)) +
+  geom_line(size = 1, alpha = 0.8) +
+  scale_color_brewer(palette = "Set1", name = "Economic Indicators") +
+  
+  scale_x_date(date_labels = "%Y-%m", date_breaks = "1 months") +
+  
+  labs(
+    title = "Normalized Trends of Macroeconomic Indicators",
+    x = "Month",
+    y = "Normalized Value"
+  ) +
+  
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",              # 图例放到底部
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.minor = element_blank()       # 去掉次网格线
+  )
+
+ggsave("/Users/inori/Desktop/数据分析/银行电话营销策略分析/ts2_plot.png", width = 12, height = 8, dpi = 300)
+```
+
+
+# 缺失值处理
+
+```{r}
+# 加载必要的包
+library(dplyr)
+library(mice)
+library(missForest) 
+library(ggplot2)
+library(tidyr)
+library(lattice)
+library(caret)   
+```
+
+## 部分缺失值删除
+
+```{r}
+# 统计缺失值
+row_missing_counts <- rowSums(is.na(df_previous))
+table(row_missing_counts)
+
+na_summary <- df_previous %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "na_count") %>%
+  mutate(na_percent = round(na_count / nrow(df) * 100, 2)) %>%
+  filter(na_count > 0)   # 只保留有缺失的变量
+head(na_summary) 
+
+# 删除Job、Marital、Education 三个指标全部缺失的数据
+df_clean <- df_previous %>%
+  filter(!(is.na(job) & is.na(marital) & is.na(education)))
+
+# 统计删除后缺失值
+row_missing_counts <- rowSums(is.na(df_clean))
+table(row_missing_counts)
+
+na_summary <- df_clean %>%
+  summarise(across(everything(), ~ sum(is.na(.)))) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "na_count") %>%
+  mutate(na_percent = round(na_count / nrow(df) * 100, 2)) %>%
+  filter(na_count > 0)   # 只保留有缺失的变量
+head(na_summary) 
+```
+
+## 缺失值填补策略评估
+
+```{r}
+df_nona <- df_clean %>% 
+  drop_na()
+df_truth <- na.omit(df_nona) 
+
+set.seed(123)
+if(nrow(df_truth) > 5000) {
+  df_truth <- df_truth %>% sample_n(5000)
+}
+
+df_missing_sim <- prodNA(df_truth, noNA = 0.1) # 生成含 10% 缺失值的数据集
+sum(is.na(df_missing_sim))
+
+df_missing_sim <- df_missing_sim %>%
+  mutate(across(where(is.character), as.factor))
+
+df_missing_sim <- as.data.frame(df_missing_sim)
+
+# 执行填补方案
+# 方案一：均值/众数填补
+get_mode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+df_imp_simple <- df_missing_sim %>%
+  mutate(across(where(is.numeric), ~ifelse(is.na(.), mean(., na.rm = TRUE), .))) %>%
+  mutate(across(where(is.factor), ~ifelse(is.na(.), as.character(get_mode(na.omit(.))), as.character(.)))) %>%
+  mutate(across(where(is.character), as.factor))
+
+# MICE (PMM) 预测均值匹配
+mice_mod <- mice(df_missing_sim, method = 'pmm', m = 1, seed = 123, print = FALSE)
+df_imp_pmm <- complete(mice_mod)
+
+# 方案三：随机森林
+rf_imp_res <- missForest(df_missing_sim, ntree = 100, verbose = FALSE) # ntree 树的数量，maxiter 迭代次数
+df_imp_rf <- rf_imp_res$ximp
+
+# 计算评估指标
+evaluate_imputation <- function(true_data, imputed_data, na_indices, data_type) {
+  
+  if (data_type == "numeric") {
+    # 数值型计算 RMSE
+    diff <- true_data[na_indices] - imputed_data[na_indices]
+    rmse <- sqrt(mean(diff^2))
+    # 防止分母为0
+    range_val <- max(true_data, na.rm=T) - min(true_data, na.rm=T)
+    if(range_val == 0) range_val <- 1 
+    nrmse <- rmse / range_val
+    return(c(RMSE = rmse, NRMSE = nrmse))
+    
+  } else {
+    # 分类型计算错误率
+    # 【核心修改点】：强制转为 character 再比较，避开 level sets different 报错
+    v_true <- as.character(true_data[na_indices])
+    v_imp  <- as.character(imputed_data[na_indices])
+    
+    wrong_count <- sum(v_true != v_imp)
+    total_count <- length(v_true)
+    
+    error_rate <- wrong_count / total_count
+    return(c(Error_Rate = error_rate))
+  }
+}
+
+# --- 重新运行循环评估部分 ---
+results <- list()
+na_matrix <- is.na(df_missing_sim)
+
+# 为了防止列名顺序问题，确保只遍历存在的列
+common_cols <- intersect(names(df_truth), names(df_imp_rf))
+
+for (col in common_cols) {
+  # 只评估有缺失值的列
+  if (sum(na_matrix[, col]) > 0) {
+    
+    # 确定变量类型
+    is_num <- is.numeric(df_truth[[col]])
+    type <- if(is_num) "numeric" else "categorical"
+    
+    # 提取该列的缺失索引
+    idx <- which(na_matrix[, col])
+    
+    # 1. 评估简单填补
+    res_simple <- evaluate_imputation(df_truth[[col]], df_imp_simple[[col]], idx, type)
+    # 2. 评估 PMM
+    res_pmm <- evaluate_imputation(df_truth[[col]], df_imp_pmm[[col]], idx, type)
+    # 3. 评估 RF
+    res_rf <- evaluate_imputation(df_truth[[col]], df_imp_rf[[col]], idx, type)
+    
+    # 存储结果
+    results[[col]] <- data.frame(
+      Variable = col,
+      Type = type,
+      Method = c("Mean/Mode", "PMM", "RandomForest"),
+      Metric_Value = c(res_simple[1], res_pmm[1], res_rf[1]) 
+    )
+  }
+}
+
+final_evaluation <- do.call(rbind, results)
+rownames(final_evaluation) <- NULL 
+print(final_evaluation)
+
+target_var <- "duration" # 替换为你数据中缺失较多的数值变量名
+
+# 构建绘图数据
+plot_df <- rbind(
+  data.frame(val = df_truth[[target_var]], type = "Original (Truth)"),
+  data.frame(val = df_imp_simple[[target_var]], type = "Mean/Mode"),
+  data.frame(val = df_imp_pmm[[target_var]], type = "PMM"),
+  data.frame(val = df_imp_rf[[target_var]], type = "Random Forest")
+)
+
+# 绘制密度图
+ggplot(plot_df, aes(x = val, color = type, fill = type)) +
+  geom_density(alpha = 0.3) +
+  theme_minimal() +
+  labs(title = paste("Imputation Distribution Comparison:", target_var),
+       subtitle = "Overlapping with 'Original' indicates better performance") +
+  scale_color_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1")
+```
+## 运行随机森林插补
+
+```{r}
+# 1. 数据准备
+df_input <- df_clean %>%
+  mutate(across(where(is.character), as.factor)) %>%
+  as.data.frame()
+
+# 2. 正式运行随机森林填补
+print("开始执行随机森林填补，请稍候...")
+final_imputation_result <- missForest(df_input, ntree = 100, verbose = TRUE)
+
+# 3. 提取填补后的数据集
+df_final <- final_imputation_result$ximp
+
+# 4. 最终检查
+print("填补完成！")
+print(paste("剩余缺失值数量:", sum(is.na(df_final)))) # 结果应为 0
+
+write.csv(df_final, "/Users/inori/Desktop/数据分析/银行电话营销策略分析/bank_marketing_imputed.csv", row.names = FALSE)
+```

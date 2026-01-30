@@ -1,0 +1,67 @@
+---
+title: "Selected Writings"
+format:
+  html:
+    toc: false
+---
+
+<style>
+  ul { list-style-type: none; padding: 0; }
+  li { margin-bottom: 1.5em; }
+  a { text-decoration: none; font-weight: 500; color: #0066cc; }
+  a:hover { text-decoration: underline; }
+  .date { color: #86868b; font-size: 0.9em; margin-left: 10px; }
+  .desc { display: block; color: #333; margin-top: 4px; font-size: 0.95em; }
+</style>
+
+## 📊 Technical & Data Analysis
+
+<ul>
+  <li>
+    <a href="https://你的公众号文章链接1" target="_blank">基于随机森林的银行营销转化预测</a>
+    <span class="date">2026.01</span>
+    <span class="desc">使用 R 语言处理不平衡数据，通过 SMOTE 技术提升模型 AUC 至 0.92。</span>
+  </li>
+  
+  <li>
+    <a href="https://你的知乎或博客链接" target="_blank">浅谈 IRT 模型在教育评估中的应用</a>
+    <span class="date">2025.11</span>
+    <span class="desc">解析 PISA 数据背后的测量学原理，探讨如何量化学生的能力值。</span>
+  </li>
+</ul>
+
+<hr style="margin: 40px 0; border-top: 1px solid #eaeaea;">
+
+## 🌱 Growth & Thoughts
+
+<ul>
+  <li>
+    <a href="https://mp.weixin.qq.com/s/vz1BeTNlpqFziKyiHUhDBA" target="_blank">鱼不存在｜关于混乱、秩序与附近的重建</a>
+    <span class="date">2025.12</span>
+    <span class="desc">关于研究生生活、科研心态与自我成长的复盘。</span>
+  </li>
+
+  <li>
+    <a href="https://mp.weixin.qq.com/s/UnLRwuM9ywpx-DyusTeA_w" target="_blank">初启 | 记录一些不喧哗的心事</a>
+    <span class="date">2025.12</span>
+    <span class="desc">关于研究生生活、科研心态与自我成长的复盘。</span>
+  </li>
+
+  <li>
+    <a href="https://mp.weixin.qq.com/s/jCSVhvT40aKFRQrortJdbQ" target="_blank">我被信息填满，却越来越空</a>
+    <span class="date">2025.12</span>
+    <span class="desc">关于研究生生活、科研心态与自我成长的复盘。</span>
+  </li>
+
+  <li>
+    <a href="https://mp.weixin.qq.com/s/nyzs0L7pRrmA1BgRHQuESg" target="_blank">游荡集｜从旅行的意义到生命的轻与重</a>
+    <span class="date">2025.12</span>
+    <span class="desc">关于研究生生活、科研心态与自我成长的复盘。</span>
+  </li>
+
+  <li>
+    <a href="https://mp.weixin.qq.com/s/Vrt3c3Q3hr8gRTOyzy-Mow" target="_blank">游荡集｜长途跋涉地返璞归真</a>
+    <span class="date">2025.12</span>
+    <span class="desc">关于研究生生活、科研心态与自我成长的复盘。</span>
+  </li>
+</ul>

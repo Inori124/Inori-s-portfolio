@@ -1,0 +1,126 @@
+/* styles.css - Apple/OpenAI 极简风定制 */
+
+/* 1. 字体核心：强制使用系统原生字体 (Mac/Win) */
+/* styles.css */
+
+/* styles.css */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1d1d1f;
+    line-height: 1.8;
+    margin: 0;
+    padding: 0;
+
+    background: linear-gradient(-45deg, #e3f2fd, #fff1eb, #f3e7e9, #e0eafc);
+    
+    background-size: 400% 400%;
+    
+    animation: gradientBG 20s ease infinite;
+
+    min-height: 100vh;
+}
+
+/* 动画关键帧保持不变，或者直接复制下面这段确保完整 */
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 为了防止背景太花导致文字看不清，我们可以给容器加一个半透明的白色底板 */
+.profile-container, .content-wrapper {
+    /* 如果你觉得文字看不清，可以把下面这行的注释取消掉 (删掉前面的 //) */
+    /* background-color: rgba(255, 255, 255, 0.6); */
+    /* backdrop-filter: blur(10px); */ /* 毛玻璃特效 */
+    /* border-radius: 20px; */
+    /* padding: 40px; */
+}
+
+/* 让图片阴影更重一点，从背景中浮现出来 */
+img.about-image, img.profile-img, img.profile-pic {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* 让按钮变成白色半透明，更高级 */
+.social-btn, .about-link, a.btn {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.4) !important;
+}
+
+.social-btn:hover, .about-link:hover, a.btn:hover {
+    background-color: #ffffff !important;
+    transform: translateY(-2px); /* 悬停时轻微上浮 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. 标题美化 */
+h1.title {
+    font-weight: 700;
+    letter-spacing: -0.03em; /* 紧凑字间距 */
+    color: #000000;
+    margin-bottom: 0.2em;
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 1.6em;
+    margin-top: 1.5em;
+    color: #1d1d1f;
+}
+
+/* 3. 链接/按钮美化 (Jolla 模板的按钮) */
+.about-link {
+    border-radius: 99px !important; /* 胶囊形状 */
+    padding: 8px 20px !important;
+    font-size: 0.9em !important;
+    font-weight: 500 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid #d2d2d7 !important; /* 浅灰边框 */
+    color: #1d1d1f !important;
+    transition: all 0.2s ease;
+}
+
+.about-link:hover {
+    background-color: #1d1d1f !important; /* 悬停变黑 */
+    color: #ffffff !important;             /* 文字变白 */
+    border-color: #1d1d1f !important;
+}
+
+/* 4. 图片美化 */
+img.about-image {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12); /* 柔和的高级阴影 */
+    margin-bottom: 1em;
+}
+
+/* 5. 表格美化 (Toolkit 部分) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+th {
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 0;
+    color: #86868b; /* 表头灰色 */
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f7; /* 极细分割线 */
+    color: #333;
+}

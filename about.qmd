@@ -1,0 +1,54 @@
+---
+title: "Ying Cao"
+image: profile.jpg
+about:
+  template: jolla       
+  image-width: 15em      
+  image-shape: round     
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:bnu_ying124@163.com
+    - icon: github
+      text: Github
+      href: https://github.com
+    - icon: file-text
+      text: Resume
+      href: resume.pdf
+format:
+  html:
+    theme: litera        
+    css: styles.css      
+    toc: false
+---
+
+<div style="text-align: center; color: #6e6e73; font-size: 1.2em; margin-bottom: 2em;">
+Data Scientist · Researcher · Storyteller
+</div>
+
+## 👋 Hello, I'm Ying!
+
+My name is **Ying Cao**, and I am currently pursuing a Master’s degree in **Applied Statistics** at **Beijing Normal University**.
+With a solid background in mathematics and statistics, my work centers on using data-driven methods to reduce uncertainty and support informed decision-making.
+
+My approach to data science is grounded in **first-principles thinking**: starting from the problem itself, clarifying assumptions, and selecting methods that are both statistically sound and practically meaningful. During my internship at **ByteDance**, I worked on **supervised fine-tuning (SFT)** for large language models, focusing on the construction and evaluation of high-quality mathematical reasoning data. By designing structured evaluation criteria, I contributed to improving the logical consistency and reliability of model outputs in educational contexts.
+
+My current academic interests lie at the intersection of **statistical modeling, educational assessment, and machine learning applications**. I am particularly interested in how interpretable models and well-designed evaluation frameworks can bridge theory and real-world deployment, especially in large-scale assessment and AI-assisted learning systems.
+
+Beyond technical work, I value clear communication and structured storytelling. I believe that a good data scientist not only builds models, but also explains results in ways that others can understand, trust, and act upon.
+
+---
+
+### 🛠 My Toolkit
+
+| Domain | Skills |
+|:---|:---|
+| **Data Science** | Python (Pandas, PyTorch), R (Tidyverse) |
+| **Modeling** | IRT, Multivariate Statistics, Machine Learning |
+| **Focus Area** | Education Assessment (PISA), LLM Applications |
+
+---
+
+<div style="font-size: 0.9em; color: gray; text-align: center; margin-top: 50px;">
+Designed with logic & data.
+</div>

@@ -1,0 +1,32 @@
+---
+title: "My Resume"
+format:
+  html:
+    toc: false  # 简历页不需要侧边目录
+---
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <a href="resume.pdf" class="btn btn-primary" role="button" target="_blank">
+    <i class="bi bi-file-earmark-pdf"></i> Download PDF Version
+  </a>
+</div>
+
+<div style="text-align: center;">
+  <iframe src="resume.pdf" width="100%" height="800px" style="border: none;">
+  </iframe>
+</div>
+
+<p style="text-align: center; font-size: small; color: gray;">
+  If the PDF does not load, please <a href="resume.pdf">download it here</a>.
+</p>
+
+## 🛠️ Extended Skills Graph
+*(PDF篇幅有限，这里展示我完整的技能树)*
+
+- **Advanced Stats**: Structural Equation Modeling (SEM), Bayesian Statistics
+- **DevOps**: Docker, Git/GitHub Actions
+- **Tools**: Tableau, Spark
+
+## 🏆 Certifications
+- Coursera: Deep Learning Specialization (Andrew Ng)
+- Kaggle: Advanced SQL

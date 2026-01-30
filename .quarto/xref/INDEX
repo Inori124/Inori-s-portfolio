@@ -1,0 +1,23 @@
+{
+  "about.qmd": {
+    "about.html": "eb785888"
+  },
+  "posts/post-with-code/index.qmd": {
+    "index.html": "fa8b818f"
+  },
+  "posts/posts:bank-marketing:index.qmd": {
+    "posts:bank-marketing:index.html": "22cf69ae"
+  },
+  "posts/welcome/index.qmd": {
+    "index.html": "6f8038bc"
+  },
+  "index.qmd": {
+    "index.html": "c135751d"
+  },
+  "resume.qmd": {
+    "resume.html": "7e90e9b4"
+  },
+  "portfolio.qmd": {
+    "portfolio.html": "25e8d386"
+  }
+}
