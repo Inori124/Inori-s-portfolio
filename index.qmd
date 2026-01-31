@@ -1,15 +1,114 @@
 ---
-title: "my-portfolio"
-listing:
-  contents: posts
-  feed: true
-  sort: "date desc"
-  type: default
-  categories: true
-  sort-ui: false
-  filter-ui: false
-page-layout: full
-title-block-banner: true
+title: "Ying Cao"
+image: profile.jpg
+about:
+  template: jolla       
+  image-width: 15em      
+  image-shape: round     
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:bnu_ying124@163.com
+    - icon: github
+      text: Github
+      href: https://github.com
+    - icon: file-text
+      text: Resume
+      href: resume.pdf
+format:
+  html:
+    theme: litera        
+    css: styles.css      
+    toc: false
 ---
 
+<div style="text-align: center; color: #6e6e73; font-size: 1.2em; margin-bottom: 2em;">
+Data Mining · Educational Research · Storyteller
+</div>
 
+Combines curiosity, structured reasoning, and statistical insight to reveal patterns, 
+
+build interpretable models, and turn complex information 
+
+into clear, actionable understanding.
+
+
+## 🎓 Education
+
+::: {.projects-grid}
+
+::: {.glass-card}
+**Master of Applied Statistics**
+<br>
+<span style="color: #666; font-size: 0.9em;">Beijing Normal University | 2025.09 - Present</span>
+
+::: {style="font-size: 0.9em; color: #333; margin-top: 10px; line-height: 1.6;"}
+**Core Courses:** Advanced Multivariate Statistics, Machine Learning.
+<br>
+**Research:** Educational Data Mining.
+:::
+:::
+
+::: {.glass-card}
+**Bachelor of Mathematics**
+<br>
+<span style="color: #666; font-size: 0.9em;">Anhui University | 2021.09 - 2025.07</span>
+
+::: {style="font-size: 0.9em; color: #333; margin-top: 10px; line-height: 1.6;"}
+**Core Course:** Advanced Algebra, Mathematical Analysis.
+<br>
+**Awards:** Outstanding Graduate, National Scholarship.
+:::
+:::
+
+::: 
+<div style="margin-top: 60px;"></div>
+
+## 🚀 Projects
+
+::: {.projects-grid}
+<a href="project1.qmd" class="glass-card" style="text-decoration: none; color: inherit; display: block;">
+  <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🦄 Project 1: LLM Reasoning Eval</div>
+  <div style="font-size: 0.95em; color: #333;">Designed a multi-dimensional evaluation framework for mathematical reasoning in LLMs.</div></a><a href="https://github.com" target="_blank" class="glass-card" style="text-decoration: none; color: inherit; display: block;">
+  <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">📊 Project 2: PISA Data Analysis</div>
+  <div style="font-size: 0.95em; color: #333;">Analyzed global student performance data using R and Tidyverse.</div></a>
+::: 
+<div style="margin-top: 60px;"></div>
+
+## 🛠 My Toolkit
+
+::: {.projects-grid}
+
+::: {.glass-card}
+<div style="font-size: 1.5em; margin-bottom: 10px;">💻</div>
+**Data Science**
+<div style="font-size: 0.9em; color: #333; margin-top: 8px; line-height: 1.5;">
+Python (Pandas, PyTorch)<br>
+R (Tidyverse)
+</div>
+:::
+
+::: {.glass-card}
+<div style="font-size: 1.5em; margin-bottom: 10px;">📈</div>
+**Modeling**
+<div style="font-size: 0.9em; color: #333; margin-top: 8px; line-height: 1.5;">
+IRT (Item Response Theory)<br>
+Multivariate Statistics<br>
+Machine Learning
+</div>
+:::
+
+::: {.glass-card}
+<div style="font-size: 1.5em; margin-bottom: 10px;">🎯</div>
+**Focus Area**
+<div style="font-size: 0.9em; color: #333; margin-top: 8px; line-height: 1.5;">
+Education Assessment (PISA)<br>
+LLM Applications
+</div>
+:::
+
+
+:::
+<div style="font-size: 0.9em; color: gray; text-align: center; margin-top: 50px;">
+Designed with logic & data.
+</div>

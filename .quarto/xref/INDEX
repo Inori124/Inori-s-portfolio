@@ -19,5 +19,14 @@
   },
   "portfolio.qmd": {
     "portfolio.html": "25e8d386"
+  },
+  "project1.qmd": {
+    "project1.html": "fbad5b8a"
+  },
+  "projects.qmd": {
+    "projects.html": "2d896638"
+  },
+  "projects.rmd": {
+    "projects.html": "6f046e87"
   }
 }

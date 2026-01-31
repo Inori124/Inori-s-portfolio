@@ -1,32 +1,90 @@
 ---
-title: "My Resume"
+title: "Resume"
 format:
   html:
-    toc: false  # 简历页不需要侧边目录
+    toc: true
+    toc-title: "Navigate"
 ---
 
-<div style="text-align: center; margin-bottom: 20px;">
-  <a href="resume.pdf" class="btn btn-primary" role="button" target="_blank">
-    <i class="bi bi-file-earmark-pdf"></i> Download PDF Version
+<div style="text-align: center; margin-bottom: 40px;">
+  <a href="resume.pdf" target="_blank" style="
+    display: inline-block;
+    padding: 10px 25px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  ">
+    <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF Version
   </a>
 </div>
 
-<div style="text-align: center;">
-  <iframe src="resume.pdf" width="100%" height="800px" style="border: none;">
-  </iframe>
-</div>
+## 💼 Experience
 
-<p style="text-align: center; font-size: small; color: gray;">
-  If the PDF does not load, please <a href="resume.pdf">download it here</a>.
-</p>
+::: {.glass-card style="margin-bottom: 20px;"}
+**Algorithm Intern (SFT Data)**
+<br>
+<span style="color: #666; font-size: 0.9em;">ByteDance | Beijing | 202x.xx - 202x.xx</span>
 
-## 🛠️ Extended Skills Graph
-*(PDF篇幅有限，这里展示我完整的技能树)*
+::: {style="font-size: 0.95em; color: #333; margin-top: 10px; line-height: 1.6;"}
+* **SFT Construction:** Constructed high-quality mathematical reasoning datasets for Large Language Models (LLM), improving model reasoning capabilities.
+* **Evaluation System:** Designed a structured evaluation criteria to assess the logical consistency and reliability of model outputs.
+* **Data Analysis:** Utilized Python to clean and analyze large-scale text data, ensuring data quality for model training.
+:::
+:::
 
-- **Advanced Stats**: Structural Equation Modeling (SEM), Bayesian Statistics
-- **DevOps**: Docker, Git/GitHub Actions
-- **Tools**: Tableau, Spark
+## 🎓 Education
 
-## 🏆 Certifications
-- Coursera: Deep Learning Specialization (Andrew Ng)
-- Kaggle: Advanced SQL
+::: {.glass-card style="margin-bottom: 20px;"}
+**Master of Applied Statistics**
+<br>
+<span style="color: #666; font-size: 0.9em;">Beijing Normal University | 2025.09 - Present</span>
+
+::: {style="font-size: 0.95em; color: #333; margin-top: 10px;"}
+**Courses:** Advanced Multivariate Statistics, Machine Learning.
+<br>
+**Research:** Educational Assessment, Psychometrics.
+:::
+:::
+
+::: {.glass-card style="margin-bottom: 20px;"}
+**Bachelor of Mathematics**
+<br>
+<span style="color: #666; font-size: 0.9em;">Anhui University | 2021.09 - 2025.07</span>
+
+::: {style="font-size: 0.9em; color: #333; margin-top: 10px; line-height: 1.6;"}
+**Major:** Applied Mathematics
+<br>
+**Awards:** Outstanding Graduate, National Scholarship.
+:::
+:::
+
+
+## 🛠️ Skills & Certifications
+
+::: {.projects-grid}
+
+::: {.glass-card}
+<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🚀 Advanced Tech Stack</div>
+<ul style="padding-left: 20px; color: #333; line-height: 1.6; margin: 0;">
+  <li>**Stats:** Structural Equation Modeling (SEM), Bayesian Statistics</li>
+  <li>**DevOps:** Docker, Git/GitHub Actions</li>
+  <li>**Big Data:** Spark, Tableau</li>
+</ul>
+:::
+
+::: {.glass-card}
+<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🏆 Certifications</div>
+<ul style="padding-left: 20px; color: #333; line-height: 1.6; margin: 0;">
+  <li>**Coursera:** Deep Learning Specialization (Andrew Ng)</li>
+  <li>**Kaggle:** Advanced SQL</li>
+</ul>
+:::
+
+:::
+<div style="height: 50px;"></div>

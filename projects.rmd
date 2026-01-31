@@ -1,0 +1,18 @@
+---
+title: "Projects"
+format:
+  html:
+    toc: false
+---
+
+<div style="text-align: center; color: #6e6e73; margin-bottom: 40px;">
+  Bridging theory and practice through code.
+</div>
+
+## 🚀 Key Projects
+
+::: {.projects-grid}
+<a href="project1.qmd" class="glass-card" style="text-decoration: none; color: inherit; display: block;"><div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🦄 LLM Reasoning Eval</div><div style="font-size: 0.85em; color: #86868b; margin-bottom: 5px;">Framework Design · Python</div><div style="font-size: 0.95em; color: #333; line-height: 1.5;">Designed a multi-dimensional evaluation framework for mathematical reasoning in LLMs, focusing on logical consistency and step-by-step verification.</div></a><a href="https://github.com/yourusername/pisa-analysis" target="_blank" class="glass-card" style="text-decoration: none; color: inherit; display: block;"><div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">📊 PISA Data Analysis</div><div style="font-size: 0.85em; color: #86868b; margin-bottom: 5px;">R (Tidyverse) · Educational Data Mining</div><div style="font-size: 0.95em; color: #333; line-height: 1.5;">Analyzed global student performance data using R and Tidyverse to investigate the correlation between socioeconomic status and learning outcomes.</div></a><a href="#" class="glass-card" style="text-decoration: none; color: inherit; display: block;"><div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">🏦 Bank Marketing Prediction</div><div style="font-size: 0.85em; color: #86868b; margin-bottom: 5px;">Machine Learning · R</div><div style="font-size: 0.95em; color: #333; line-height: 1.5;">Implemented Random Forest models to predict term deposit subscriptions, handling class imbalance with SMOTE techniques.</div></a>
+:::
+
+<div style="height: 50px;"></div>

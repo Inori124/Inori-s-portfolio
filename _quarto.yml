@@ -3,15 +3,17 @@ project:
   output-dir: docs
 
 website:
-  title: "Ying Cao | Data Scientist"  # 网站标题
+  title: "Ying Cao | Portfolio"  # 网站标题
   navbar:
     right:
       - text: "About"
-        href: about.qmd
+        href: index.qmd
       - text: "Projects"
-        href: index.qmd         
+        href: projects.qmd         
+      - text: "Articles"
+        href: portfolio.qmd
       - text: "Resume"
-        href: resume.pdf 
+        href: resume.qmd 
       - icon: github
         href: https://github.com/Inori124
       - icon: linkedin
