@@ -4,21 +4,7 @@
     "href": "portfolio.html",
     "title": "Articles",
     "section": "",
-    "text": "A collection of technical notes & personal essays."
-  },
-  {
-    "objectID": "portfolio.html#technical-data-analysis",
-    "href": "portfolio.html#technical-data-analysis",
-    "title": "Articles",
-    "section": "📊 Technical & Data Analysis",
-    "text": "📊 Technical & Data Analysis\n\n\n\n2026.01\n\n\n基于随机森林的银行营销转化预测\n\n\n使用 R 语言处理不平衡数据，通过 SMOTE 技术提升模型 AUC 至 0.92。\n\n\n\n2025.11\n\n\n浅谈 IRT 模型在教育评估中的应用\n\n\n解析 PISA 数据背后的测量学原理，探讨如何量化学生的能力值。"
-  },
-  {
-    "objectID": "portfolio.html#growth-thoughts",
-    "href": "portfolio.html#growth-thoughts",
-    "title": "Articles",
-    "section": "🌱 Growth & Thoughts",
-    "text": "🌱 Growth & Thoughts\n\n\n\n2025.12\n\n\n鱼不存在｜关于混乱、秩序与附近的重建\n\n\n关于研究生生活、科研心态与自我成长的复盘。\n\n\n\n2025.12\n\n\n初启 | 记录一些不喧哗的心事\n\n\n年度总结：在快节奏的时代里，寻找内心的锚点。\n\n\n\n2025.12\n\n\n我被信息填满，却越来越空\n\n\n关于信息过载、算法推荐与深度阅读的思考。\n\n\n\n2025.12\n\n\n游荡集｜从旅行的意义到生命的轻与重\n\n\n旅途随笔：在陌生的城市里重新发现自己。"
+    "text": "A collection of notes & personal essays. \n\n\n\n💬\n\n\n微信公众号：春野小记\n\n\n我的深度思考首发地。分享数据科学、科研心得与书影音记录。\n\n\n\n📕\n\n\n小红书：名湫湫湫\n\n\n记录生活碎片、摄影日常与灵感瞬间。在这里看见更鲜活的我。\n\n\n\n\n\n\n\nSelected Articles\n\n\n\n\n2025.12\n\n\n鱼不存在｜关于混乱、秩序与附近的重建\n\n\n关于研究生生活、科研心态与自我成长的复盘。\n\n\n\n2025.12\n\n\n初启 | 记录一些不喧哗的心事\n\n\n在快节奏的时代里，寻找内心的锚点。\n\n\n\n2025.12\n\n\n我被信息填满，却越来越空\n\n\n关于信息过载、算法推荐与深度阅读的思考。\n\n\n\n2025.12\n\n\n游荡集｜从旅行的意义到生命的轻与重\n\n\n在陌生的城市里重新发现自己。"
   },
   {
     "objectID": "projects.html",
@@ -60,7 +46,7 @@
     "href": "resume.html#experience",
     "title": "Resume",
     "section": "💼 Experience",
-    "text": "💼 Experience\n\nAlgorithm Intern (SFT Data)  ByteDance | Beijing | 202x.xx - 202x.xx\n\n\nSFT Construction: Constructed high-quality mathematical reasoning datasets for Large Language Models (LLM), improving model reasoning capabilities.\nEvaluation System: Designed a structured evaluation criteria to assess the logical consistency and reliability of model outputs.\nData Analysis: Utilized Python to clean and analyze large-scale text data, ensuring data quality for model training."
+    "text": "💼 Experience\n\nAI Expertise Intern (SFT)  ByteDance | Beijing | 2023.12 - 2024.03\n\n\nSFT Construction: Constructed high-quality mathematical reasoning datasets for Large Language Models (LLM), improving model reasoning capabilities.\nEvaluation System: Designed a structured evaluation criteria to assess the logical consistency and reliability of model outputs.\nData Analysis: Utilized Python to clean and analyze large-scale text data, ensuring data quality for model training."
   },
   {
     "objectID": "resume.html#education",
@@ -214,27 +200,6 @@
     "href": "index.html",
     "title": "Ying Cao",
     "section": "",
-    "text": "Data Mining · Educational Research · Storyteller\nCombines curiosity, structured reasoning, and statistical insight to reveal patterns,\nbuild interpretable models, and turn complex information\ninto clear, actionable understanding."
-  },
-  {
-    "objectID": "index.html#education",
-    "href": "index.html#education",
-    "title": "Ying Cao",
-    "section": "🎓 Education",
-    "text": "🎓 Education\n\n\nMaster of Applied Statistics  Beijing Normal University | 2025.09 - Present\n\nCore Courses: Advanced Multivariate Statistics, Machine Learning.  Research: Educational Data Mining.\n\n\n\nBachelor of Mathematics  Anhui University | 2021.09 - 2025.07\n\nCore Course: Advanced Algebra, Mathematical Analysis.  Awards: Outstanding Graduate, National Scholarship."
-  },
-  {
-    "objectID": "index.html#projects",
-    "href": "index.html#projects",
-    "title": "Ying Cao",
-    "section": "🚀 Projects",
-    "text": "🚀 Projects\n\n\n\n🦄 Project 1: LLM Reasoning Eval\n\n\nDesigned a multi-dimensional evaluation framework for mathematical reasoning in LLMs.\n\n\n\n📊 Project 2: PISA Data Analysis\n\n\nAnalyzed global student performance data using R and Tidyverse."
-  },
-  {
-    "objectID": "index.html#my-toolkit",
-    "href": "index.html#my-toolkit",
-    "title": "Ying Cao",
-    "section": "🛠 My Toolkit",
-    "text": "🛠 My Toolkit\n\n\n\n💻\n\nData Science\n\nPython (Pandas, PyTorch) R (Tidyverse)\n\n\n\n\n📈\n\nModeling\n\nIRT (Item Response Theory) Multivariate Statistics Machine Learning\n\n\n\n\n🎯\n\nFocus Area\n\nEducation Assessment (PISA) LLM Applications\n\n\n\n\nDesigned with logic & data."
+    "text": "Data Mining · Educational Research · Storyteller\n\nCombines curiosity, structured reasoning, and statistical insight to reveal patterns,\nbuild interpretable models, and turn complex information\ninto clear, actionable understanding.\n\n🎓 Education Experience\n\n\nMaster of Applied Statistics  Beijing Normal University  2025.09 - Present\n\nCore Courses: Advanced Multivariate Statistics, Machine Learning.  Research: Educational Data Mining.\n\n\n\nBachelor of Mathematics  Anhui University  2021.09 - 2025.07\n\nCore Course: Advanced Algebra, Mathematical Analysis.  Awards: Outstanding Graduate.\n\n\n\n\n\n\n\nThinking, Modeling, Doing\n\n\n\n💻\n\nData & Tools\n\nPython · R · Matlab · SPSS · SQL · Excel\n\n\n\n\n📈\n\nModeling & Analysis\n\nMultivariate Statistics · Regression Analysis · Machine Learning · Interpretable Models · Experimental Design\n\n\n\n\n🎯\n\nResearch Area\n\nEducation Assessment · Statistical Reasoning · Data-driven Decision Making\n\n\n\n\n🧠\n\nThinking & Communication\n\nFirst-principles Thinking · Structured Reasoning · Clear Storytelling · Insight Interpretation\n\n\n\n\nDesigned with logic & data."
   }
 ]

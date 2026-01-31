@@ -2,8 +2,7 @@
 title: "Resume"
 format:
   html:
-    toc: true
-    toc-title: "Navigate"
+    toc: false
 ---
 
 <div style="text-align: center; margin-bottom: 40px;">
@@ -27,11 +26,11 @@ format:
 ## 💼 Experience
 
 ::: {.glass-card style="margin-bottom: 20px;"}
-**Algorithm Intern (SFT Data)**
+**AI Expertise Intern (SFT)**
 <br>
-<span style="color: #666; font-size: 0.9em;">ByteDance | Beijing | 202x.xx - 202x.xx</span>
+<span style="color: #666; font-size: 0.9em;">ByteDance | Beijing | 2023.12 - 2024.03</span>
 
-::: {style="font-size: 0.95em; color: #333; margin-top: 10px; line-height: 1.6;"}
+::: {style="font-size: 0.9em; color: #333; margin-top: 10px; line-height: 1.6;"}
 * **SFT Construction:** Constructed high-quality mathematical reasoning datasets for Large Language Models (LLM), improving model reasoning capabilities.
 * **Evaluation System:** Designed a structured evaluation criteria to assess the logical consistency and reliability of model outputs.
 * **Data Analysis:** Utilized Python to clean and analyze large-scale text data, ensuring data quality for model training.
@@ -70,17 +69,17 @@ format:
 ::: {.projects-grid}
 
 ::: {.glass-card}
-<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🚀 Advanced Tech Stack</div>
-<ul style="padding-left: 20px; color: #333; line-height: 1.6; margin: 0;">
-  <li>**Stats:** Structural Equation Modeling (SEM), Bayesian Statistics</li>
+<div style="font-size: 1em; font-weight: bold; margin-bottom: 10px;">🚀 Advanced Tech Stack</div>
+<ul style="font-size: 0.9em; padding-left: 20px; color: #333; line-height: 1.6; margin: 0;">
+  <li>**Stats:** Structural Equation Modeling (SEM), Bayesian Statistics</li> 
   <li>**DevOps:** Docker, Git/GitHub Actions</li>
   <li>**Big Data:** Spark, Tableau</li>
 </ul>
 :::
 
 ::: {.glass-card}
-<div style="font-size: 1.2em; font-weight: bold; margin-bottom: 10px;">🏆 Certifications</div>
-<ul style="padding-left: 20px; color: #333; line-height: 1.6; margin: 0;">
+<div style="font-size: 1em; font-weight: bold; margin-bottom: 10px;">🏆 Certifications</div>
+<ul style="font-size: 0.9em; padding-left: 20px; color: #333; line-height: 1.6; margin: 0;">
   <li>**Coursera:** Deep Learning Specialization (Andrew Ng)</li>
   <li>**Kaggle:** Advanced SQL</li>
 </ul>

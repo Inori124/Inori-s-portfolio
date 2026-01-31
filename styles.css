@@ -94,7 +94,6 @@ h2 {
     max-width: 1000px !important;
 }
 
-/* 再次确认网格布局 */
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 智能分栏 */
@@ -103,38 +102,12 @@ h2 {
     margin-top: 20px;
 }
 
-/* 4. 图片美化 */
 img.about-image {
     box-shadow: 0 20px 40px rgba(0,0,0,0.12); /* 柔和的高级阴影 */
     margin-bottom: 1em;
 }
 
-/* 5. 表格美化 (Toolkit 部分) */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 0.95em;
-}
 
-th {
-    text-align: left;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 10px 0;
-    color: #86868b; /* 表头灰色 */
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8em;
-}
-
-td {
-    padding: 12px 0;
-    border-bottom: 1px solid #f5f5f7; /* 极细分割线 */
-    color: #333;
-}
-
-
-/* 🍎 Apple 风格玻璃拟态卡片 (升级版) */
 .glass-card {
     text-align: left;
     display: block; /* 关键：让链接变成块级元素，撑满空间 */
@@ -149,7 +122,6 @@ td {
     padding: 24px;
     height: 100%; /* 保证分栏时高度一致 */
     
-    /* 🚀 核心动画设置 */
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
@@ -184,14 +156,12 @@ td {
     margin-top: 20px;
 }
 
-/* 📱 手机端适配：在手机上自动变成单列，不然太挤了 */
 @media (max-width: 768px) {
     .projects-grid {
         grid-template-columns: 1fr;
     }
 }
 
-/* --- styles.css --- */
 
 .projects-grid {
     display: grid;
@@ -202,7 +172,6 @@ td {
     margin: 20px auto;
 }
 
-/* 强制图片和卡片内容不溢出 */
 .glass-card {
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(16px);
@@ -212,7 +181,6 @@ td {
     padding: 24px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     
-    /* 关键属性：防止卡片内容撑破容器 */
     overflow: hidden; 
     box-sizing: border-box;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -223,12 +191,10 @@ td {
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* 消除 Markdown 自动生成的幽灵空行 */
 .projects-grid > p {
     display: none !important;
 }
 
-/* --- 修复渐变背景分割线 (锁定背景法) --- */
 
 body {
     /* 关键 1: 锁定背景。
