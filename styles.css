@@ -101,26 +101,3 @@ img.about-image {
     margin-bottom: 1em;
 }
 
-/* 5. 表格美化 (Toolkit 部分) */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 0.95em;
-}
-
-th {
-    text-align: left;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 10px 0;
-    color: #86868b; /* 表头灰色 */
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8em;
-}
-
-td {
-    padding: 12px 0;
-    border-bottom: 1px solid #f5f5f7; /* 极细分割线 */
-    color: #333;
-}
