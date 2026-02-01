@@ -208,3 +208,35 @@ body {
     /* 关键 3: 铺满全屏。确保背景涵盖整个可视区域 */
     background-size: cover !important;
 }
+
+/* --- styles.css 末尾添加 --- */
+
+/* 1. 启用浏览器原生的平滑视图过渡 (核心代码) */
+/* 这会让 Chrome/Edge/Arc 等现代浏览器在跳转时自动产生“渐变/变形”效果 */
+@view-transition {
+  navigation: auto;
+}
+
+/* 2. 为不支持 View Transition 的浏览器增加“淡入上浮”动画 */
+/* 这样页面加载时会有一个温柔的“浮现”效果，而不是瞬间出现 */
+body {
+  animation: pageFadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px); /* 从下方 15px 处开始浮现 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 3. 优化卡片点击瞬间的反馈 (让用户感觉更灵敏) */
+.glass-card:active {
+  transform: scale(0.98); /* 点击时微微缩小 */
+  background: rgba(255, 255, 255, 0.8); /* 点击时变亮 */
+  transition: transform 0.1s ease, background 0.1s ease;
+}
