@@ -28,5 +28,8 @@
   },
   "projects.rmd": {
     "projects.html": "6f046e87"
+  },
+  "dashboard.qmd": {
+    "dashboard.html": "9b901cee"
   }
 }

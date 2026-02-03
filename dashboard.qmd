@@ -1,0 +1,17 @@
+---
+title: "Data Dashboard"
+format:
+  html:
+    page-layout: full  # 使用全宽布局，视野更好
+---
+
+这里是我的交互式数据分析看板。你可以直接拖拽 CSV 文件进行分析。
+
+<div class="column-screen-inset">
+  <iframe 
+    src="https://4q20n7-0-0.shinyapps.io/dashboard/" 
+    width="100%" 
+    height="800px" 
+    style="border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+  </iframe>
+</div>
